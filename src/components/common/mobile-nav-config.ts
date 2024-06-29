@@ -25,12 +25,12 @@ interface MobileNavConfig {
 export const mobileNavConfig: MobileNavConfig = {
   mainNav: [
     {
-      title: "marketplace",
-      href: "/#",
+      title: "features",
+      href: "/features",
     },
     {
-      title: "card",
-      href: "/card",
+      title: "contact",
+      href: "/contact",
     },
     // {
     //   title: "Signup",
