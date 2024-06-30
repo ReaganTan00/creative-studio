@@ -1,15 +1,20 @@
 import GeneratorInputs from "@/components/app/GeneratorInputs";
+import { SiteHeader } from "@/components/common/site-header";
 
 const App = () => {
     return (
-        <div className="flex flex-col items-center justify-center w-full h-full min-h-screen bg-background">
-            <div className="max-w-3xl px-4 py-12 mx-auto space-y-5 text-center">
-                <div className="space-y-3">
-                    <AppTitle />
+        <>
+            <SiteHeader />
+
+            <div className="flex flex-col items-center justify-center w-full h-full min-h-screen bg-background">
+                <div className="max-w-3xl px-4 py-12 mx-auto space-y-5 text-center">
+                    <div className="space-y-3">
+                        <AppTitle />
+                    </div>
+                    <GeneratorInputs />
                 </div>
-                <GeneratorInputs />
             </div>
-        </div>
+        </>
     );
 };
 
