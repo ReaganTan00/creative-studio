@@ -18,12 +18,6 @@ export function MainNav({
           <Icons.logo className="mr-2 h-2 w-2 fill-foreground" />
         </Link>
         <Link
-          href="/creative-studio/generate"
-          className="font-bold transition-colors hover:text-primary pb-2"
-        >
-          Generate
-        </Link>
-        <Link
           href="/features"
           className="font-bold transition-colors hover:text-primary pb-2"
         >

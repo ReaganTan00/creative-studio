@@ -6,11 +6,13 @@ import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import ImageInput from "./ImageInput";
 import PromptInput from "./PromptInput";
+import { useRouter } from "next/navigation";
 
 const AssetGenerator = () => {
     const [prompt, setPrompt] = useState("");
     const [image, setImage] = useState<File>();
     const [isPrivate, setIsPrivate] = useState(false);
+    const router = useRouter();
     const handleGenerate = () => {
         const jsonData = {
             prompt,
@@ -23,6 +25,9 @@ const AssetGenerator = () => {
         formData.append("jsonData", JSON.stringify(jsonData));
         console.log("jsontData: ", formData.get("jsonData"));
         console.log("imageFile: ", formData.get("imageFile"));
+
+
+        router.push("/app/generate")
     };
 
     const handleCheckChange = (checked: boolean) => {
