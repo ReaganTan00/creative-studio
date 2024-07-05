@@ -1,33 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 import ImageInput from "./ImageInput";
 import PromptInput from "./PromptInput";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 const AssetGenerator = () => {
     const [prompt, setPrompt] = useState("");
-    const [image, setImage] = useState<File>();
+    const [image, setImage] = useState<File | undefined>(undefined);
     const [isPrivate, setIsPrivate] = useState(false);
     const router = useRouter();
-    const handleGenerate = () => {
-        const jsonData = {
-            prompt,
-            isPrivate,
-        };
+
+    const handleGenerate = async (e: FormEvent) => {
+        e.preventDefault();
 
         const formData = new FormData();
-
         formData.append("imageFile", image ?? "");
-        formData.append("jsonData", JSON.stringify(jsonData));
-        console.log("jsontData: ", formData.get("jsonData"));
+        formData.append("textPrompt", prompt);
+        formData.append("isPrivate", isPrivate.toString());
+
+        console.log("jsonData: ", formData.get("jsonData"));
         console.log("imageFile: ", formData.get("imageFile"));
 
+        const response = await fetch('http://localhost:3001/app/generate', {
+            method: 'POST',
+            body: formData,
+        });
 
-        router.push("/app/generate")
+        if (response.ok) {
+            const data = await response.json();
+            const imageUrl = data.imageUrl;
+            router.push({
+                pathname: "/app/generate",
+                query: { imageUrl, prompt },
+            });
+        } else {
+            console.error('Error generating image');
+        }
     };
 
     const handleCheckChange = (checked: boolean) => {

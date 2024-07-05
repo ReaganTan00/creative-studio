@@ -1,18 +1,25 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const { spawn } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import multer from 'multer';
+import { spawn } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors());
 app.use(bodyParser.json());
 
-app.post('/generate', (req, res) => {
-    const textPrompt = req.body.text_prompt;
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/generate', upload.single('imageFile'), (req, res) => {
+    const textPrompt = req.body.textPrompt;
+    const isPrivate = req.body.isPrivate === 'true';
+
+    console.log('Received prompt:', textPrompt);
+    console.log('Received isPrivate:', isPrivate);
 
     const process = spawn('python', ['generate_image.py', textPrompt]);
 
@@ -31,12 +38,9 @@ app.post('/generate', (req, res) => {
 
         const imgPath = path.join(__dirname, 'generated_image.png');
         if (fs.existsSync(imgPath)) {
-            res.sendFile(imgPath, (err) => {
-                if (err) {
-                    console.error(err);
-                    res.status(500).send('Error sending image');
-                }
-            });
+            // Assuming you're serving static files from the 'public' directory
+            const imgUrl = `http://localhost:${port}/public/generated_image.png`;
+            res.json({ imageUrl: imgUrl });
         } else {
             res.status(500).send('Image not found');
         }
